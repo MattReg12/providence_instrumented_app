@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rrweb/rrweb-plugin-console-record": "^2.0.0-alpha.17",
+    "agent": "github:capstone2408-team4/agent",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-toastify": "^10.0.6"

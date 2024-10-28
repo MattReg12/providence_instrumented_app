@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState, useEffect } from 'react'
 import './App.css'
 import { toast, ToastContainer } from 'react-toastify'
@@ -41,6 +43,18 @@ interface PaymentInfo {
   expiry: string
   cvv: string
 }
+
+import ProvidenceAgent from 'agent';
+
+const agent = new ProvidenceAgent({
+  backendUrl: 'http://localhost:5001/api/record',
+  projectID: 'cfc15e83-970b-42cd-989f-b87b785a1fd4',
+  // debug: true,
+  onEventRecorded: (event) => {
+    // console.log('Event recorded:', event);
+  },
+});
+
 
 function App() {
   // Your existing products array (keep exactly as is)
@@ -288,6 +302,25 @@ function App() {
   })
   const [orderProcessing, setOrderProcessing] = useState(false)
   const [inventory, setInventory] = useState<{ [key: number]: number }>({}) 
+
+  useEffect(() => {
+    const startRecording = () => {
+      console.log('App loaded');
+      agent.startRecord();
+    };
+
+    if (document.readyState === 'complete') {
+      startRecording();
+    } else {
+      window.addEventListener('load', startRecording);
+    }
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('load', startRecording);
+      agent.stopRecord();
+    };
+  }, []);
 
   useEffect(() => {
     const initialInventory = products.reduce((acc, product) => {
